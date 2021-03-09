@@ -62,24 +62,44 @@ namespace HalliburtonTest.Controllers
                 var oEmployees = context.Employees;
 
                 resposta = oTrip.Where(c => c.TripDate > inicio).Where(c => c.TripDate < fim)
-                    .Where(c => c.TripType == Trip.EnumTripType.Boarding);
-               // resposta = resposta.Where(c => c.TripDate < desembarque)
-               //     .Where(c => c.TripType == Trip.EnumTripType.Landing);
-
-                //resposta = oTrip.Where(c => c.TripDate == embarque)
-                //    .Select((u => new Trip
-                //    {
-                //        TripDate = u.TripDate,
-                //        EmployeeId = u.EmployeeId,
-                //        TripType = u.TripType
-                //        //  Trips = u.Trips.Select(p => p)
-                //    }));
+                    .Where(c => c.TripType == Trip.EnumTripType.Boarding)
+                    .Include(c => c.Employee);
+            
                 r = resposta.ToList();
 
-                foreach (Trip trip in r)
-                {
-                    trip.Employee = oEmployees.Find(trip.EmployeeId);
-                }
+                //foreach (Trip trip in r)
+                //{
+                //    trip.Employee = oEmployees.Find(trip.EmployeeId);
+                //}
+            }
+            // return Ok(resposta);
+
+            return r;
+        }
+
+        [HttpGet("GetAnalise")]
+        public IEnumerable<Analise> GetAnalise()
+        {
+            IQueryable<Trip> resposta;
+            List<Trip> r;
+            var options = new DbContextOptionsBuilder<ApiContext>().UseInMemoryDatabase(databaseName: "Test").Options;
+
+            using (var context = new ApiContext(options))
+            {
+
+                var oTrip = context.Trips;
+                var oEmployees = context.Employees;
+
+                resposta = oTrip.Where(c => c.TripDate > inicio).Where(c => c.TripDate < fim)
+                    .Where(c => c.TripType == Trip.EnumTripType.Boarding)
+                    .Include(c => c.Employee);
+
+                r = resposta.ToList();
+
+                //foreach (Trip trip in r)
+                //{
+                //    trip.Employee = oEmployees.Find(trip.EmployeeId);
+                //}
             }
             // return Ok(resposta);
 

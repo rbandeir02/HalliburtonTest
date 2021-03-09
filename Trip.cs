@@ -16,8 +16,6 @@ namespace HalliburtonTest
 
         public EnumTripType TripType { get; set; }
 
-        public int TripDays { get; set; }
-
         public int EmployeeId { get; set; }
 
         [ForeignKey("EmployeeId")]
