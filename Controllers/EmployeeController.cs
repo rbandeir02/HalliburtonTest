@@ -48,8 +48,8 @@ namespace HalliburtonTest.Controllers
             return r;
         }
 
-        [HttpGet("GetAllEmployeeByTripDate")]
-        public IEnumerable<Trip> GetAllEmployeeByTripDate(DateTime embarque, DateTime desembarque)
+        [HttpGet("GetAllEmployeeByBoardingDate")]
+        public IEnumerable<Trip> GetAllEmployeeByBoardingDate(DateTime inicio, DateTime fim)
         {
             IQueryable<Trip> resposta;
             List<Trip> r;
@@ -61,10 +61,10 @@ namespace HalliburtonTest.Controllers
                 var oTrip = context.Trips;
                 var oEmployees = context.Employees;
 
-                resposta = oTrip.Where(c => c.TripDate > embarque)
+                resposta = oTrip.Where(c => c.TripDate > inicio).Where(c => c.TripDate < fim)
                     .Where(c => c.TripType == Trip.EnumTripType.Boarding);
-                resposta = resposta.Where(c => c.TripDate < desembarque)
-                    .Where(c => c.TripType == Trip.EnumTripType.Landing);
+               // resposta = resposta.Where(c => c.TripDate < desembarque)
+               //     .Where(c => c.TripType == Trip.EnumTripType.Landing);
 
                 //resposta = oTrip.Where(c => c.TripDate == embarque)
                 //    .Select((u => new Trip
