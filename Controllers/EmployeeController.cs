@@ -49,10 +49,12 @@ namespace HalliburtonTest.Controllers
         }
 
         [HttpGet("GetAllEmployeeByBoardingDate")]
-        public IEnumerable<Trip> GetAllEmployeeByBoardingDate(DateTime inicio, DateTime fim)
+        public Analise GetAllEmployeeByBoardingDate(DateTime inicio, DateTime fim)
         {
             IQueryable<Trip> resposta;
             List<Trip> r;
+            List<Analise> resAnalise;
+            Analise oAnalise;
             var options = new DbContextOptionsBuilder<ApiContext>().UseInMemoryDatabase(databaseName: "Test").Options;
 
             using (var context = new ApiContext(options))
@@ -67,43 +69,25 @@ namespace HalliburtonTest.Controllers
             
                 r = resposta.ToList();
 
+                if (r.Count == 0)
+                {
+                    return null;
+                }
+
+                resAnalise = new List<Analise>();
+                oAnalise = new Analise();
+                oAnalise.Trips = r;
+                oAnalise.TripNumbers = r.Count;
+                //oAnalise.Trips = new Lis
                 //foreach (Trip trip in r)
                 //{
+                    
                 //    trip.Employee = oEmployees.Find(trip.EmployeeId);
                 //}
             }
             // return Ok(resposta);
 
-            return r;
-        }
-
-        [HttpGet("GetAnalise")]
-        public IEnumerable<Analise> GetAnalise()
-        {
-            IQueryable<Trip> resposta;
-            List<Trip> r;
-            var options = new DbContextOptionsBuilder<ApiContext>().UseInMemoryDatabase(databaseName: "Test").Options;
-
-            using (var context = new ApiContext(options))
-            {
-
-                var oTrip = context.Trips;
-                var oEmployees = context.Employees;
-
-                resposta = oTrip.Where(c => c.TripDate > inicio).Where(c => c.TripDate < fim)
-                    .Where(c => c.TripType == Trip.EnumTripType.Boarding)
-                    .Include(c => c.Employee);
-
-                r = resposta.ToList();
-
-                //foreach (Trip trip in r)
-                //{
-                //    trip.Employee = oEmployees.Find(trip.EmployeeId);
-                //}
-            }
-            // return Ok(resposta);
-
-            return r;
+            return oAnalise;
         }
 
 
